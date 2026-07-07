@@ -135,7 +135,7 @@ def run_experiment(
     feature_col: str,
     target_col: str = "GPA",
     test_size: float = 0.2,
-    random_state: int = 42,
+    random_state: int = 489,
 ) -> dict[str, object]:
     """Run scikit-learn and manual OLS regression for one feature."""
     data = clean_df[[feature_col, target_col]].dropna().copy()
