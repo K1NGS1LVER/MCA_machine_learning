@@ -1,0 +1,143 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: -apple-system, Helvetica, Arial, sans-serif; color:#222;
+       line-height:1.45; font-size:11pt; }
+h1 { font-size:20pt; border-bottom:3px solid #2c3e50; padding-bottom:6px; }
+h2 { font-size:14pt; color:#2c3e50; margin-top:22px;
+     border-bottom:1px solid #ccc; padding-bottom:3px; }
+h3 { font-size:12pt; color:#34495e; margin-bottom:4px; }
+table { border-collapse:collapse; margin:8px 0; width:auto; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:4px 9px; text-align:center; }
+th { background:#2c3e50; color:#fff; }
+img { max-width:100%; margin:6px 0; }
+.note { background:#f4f6f7; border-left:4px solid #2c3e50; padding:6px 12px;
+        margin:8px 0; font-size:10pt; }
+.cap { font-size:9pt; color:#666; font-style:italic; margin-top:-2px; }
+.cols { display:flex; gap:18px; align-items:flex-start; }
+.cols > div { flex:1; }
+</style></head><body>
+
+<h1>Lab 9 &mdash; Support Vector Machine (SVM) &amp; Principal Component Analysis (PCA)</h1>
+<p><b>Aim:</b> Implement SVM for classification and PCA for dimensionality reduction,
+and analyse their effectiveness on real-world datasets. Supervised (SVM) vs
+unsupervised (PCA) learning are contrasted; class balancing and stratified k-fold
+cross-validation are applied throughout.</p>
+
+<h2>Part A &mdash; Support Vector Machine (SVM)</h2>
+<p><b>Dataset:</b> UCI Breast Cancer Wisconsin (Diagnostic) &mdash; 569 samples, 30
+features. Features standardized (SVM is distance-based).</p>
+
+<div class="cols">
+<div>
+<h3>Class distribution</h3>
+<img src="figs/a_class_balance.png">
+<p class="cap">Mild imbalance: malignant 212 vs benign 357.</p>
+</div>
+<div>
+<h3>Method</h3>
+<ul>
+<li>80:20 train/test split with <code>stratify=y</code> (preserves class ratio).</li>
+<li>Class balancing via <code>class_weight='balanced'</code> to stop the minority
+(malignant) class being ignored.</li>
+<li>Hyperparameter tuning of C by GridSearchCV over a log range with 5-fold
+<b>stratified</b> k-fold CV, selecting the best CV F1.</li>
+<li>Kernel comparison: linear / rbf / poly.</li>
+</ul>
+</div>
+</div>
+
+<h3>Linear SVM &mdash; baseline (C=1) vs balanced</h3>
+<table><tr><th>Metric</th><th>Balanced (C=1)</th></tr>
+<tr><td>Accuracy</td><td>0.9561</td></tr>
+<tr><td>Precision</td><td>0.9855</td></tr>
+<tr><td>Recall</td><td>0.9444</td></tr>
+<tr><td>F1 Score</td><td>0.9645</td></tr></table>
+<p>Confusion matrix (rows=true, cols=pred): <code>[[41, 1], [4, 68]]</code></p>
+
+<h3>Tuned linear SVM (best C)</h3>
+<div class="note">GridSearchCV &rarr; <b>best C = 0.0100</b>,
+mean CV F1 = <b>0.9808</b> (5-fold stratified CV).</div>
+<table>
+<tr><th>Metric</th><th>Test value</th></tr>
+<tr><td>Accuracy</td><td>0.9737</td><td>0.9737</td></tr><tr><td>Precision</td><td>0.9859</td><td>0.9859</td></tr>
+<tr><td>Recall</td><td>0.9722</td><td>0.9722</td></tr><tr><td>F1 Score</td><td>0.9790</td><td>0.9790</td></tr>
+</table>
+<p>Confusion matrix: <code>[[41, 1], [2, 70]]</code></p>
+
+<h3>Stratified k-fold cross-validation (full data, 5 folds)</h3>
+<table><tr><th>Score</th><th>Mean &plusmn; Std</th></tr>
+<tr><td>Accuracy</td><td>0.9772 &plusmn; 0.0089</td></tr>
+<tr><td>F1</td><td>0.9820 &plusmn; 0.0069</td></tr>
+<tr><td>Precision</td><td>0.9757 &plusmn; 0.0195</td></tr>
+<tr><td>Recall</td><td>0.9888 &plusmn; 0.0162</td></tr>
+</table>
+
+<h3>Kernel comparison (CV F1 over 5-fold stratified CV)</h3>
+<table>
+<tr><th>Kernel</th><th>CV F1</th><th>Test Accuracy</th><th>Test F1</th></tr>
+<tr><td>linear</td><td>0.9755</td><td>0.9561</td><td>0.9645</td></tr><tr><td>rbf</td><td>0.9807</td><td>0.9649</td><td>0.9718</td></tr><tr><td>poly</td><td>0.9409</td><td>0.9561</td><td>0.9664</td></tr>
+</table>
+<p><b>Winner (CV F1):</b> rbf.</p>
+
+<div class="note"><b>Part A observations.</b> The classes are well separated after
+standardization, so every kernel scores high. Class balancing lifts recall on the
+minority class; stratified CV shows stable generalization (low std). The tuned C
+(0.0100) is small, indicating a wide margin is preferred. rbf edges out linear
+and poly on CV F1 for this scaled data.</div>
+
+<h2>Part B &mdash; Principal Component Analysis (PCA)</h2>
+<p><b>Dataset:</b> UCI Wine &mdash; 178 samples, 13 features (3 cultivars). Features
+standardized so no single variable dominates the variance.</p>
+
+<h3>PCA projection &amp; explained variance</h3>
+<img src="figs/b_pca_scatter.png">
+<p class="cap">2-D PCA projection of Wine; PC1 = 36.2% variance,
+PC2 = 19.2% (total 55.4% retained in 2 PCs).</p>
+
+<h3>Variance retained &amp; minimum components for &ge; 95%</h3>
+<img src="figs/b_scree.png">
+<p>The cumulative curve crosses 95% variance at <b>10 of 13</b> components &mdash;
+a strong compression: from 13 dimensions down to 10 keeps essentially all
+information.</p>
+
+<h3>Interpretation of PC1 &amp; PC2 (top loadings)</h3>
+<table><tr><th>Component</th><th>Top contributing features (weight)</th></tr>
+<tr><td>PC1</td><td>flavanoids (+0.42), total_phenols (+0.39), od280/od315_of_diluted_wines (+0.38), proanthocyanins (+0.31), nonflavanoid_phenols (-0.30)</td></tr><tr><td>PC2</td><td>color_intensity (+0.53), alcohol (+0.48), proline (+0.36), ash (+0.32), magnesium (+0.30)</td></tr>
+</table>
+
+<h3>Original vs transformed</h3>
+<table><tr><th>Aspect</th><th>Original (13-D)</th><th>PCA (2-D)</th></tr>
+<tr><td># features</td><td>13</td><td>2</td></tr>
+<tr><td>Information</td><td>100%</td><td>55.4% retained</td></tr>
+<tr><td>Efficiency</td><td>slower</td><td>faster</td></tr>
+<tr><td>Separability</td><td>full</td><td>mostly kept</td></tr>
+<tr><td>Interpretability</td><td>per-feature</td><td>mixed combos</td></tr></table>
+
+<div class="note"><b>PCA pros:</b> decorrelates, denoises, compresses, speeds models,
+enables 2-D visualization. <b>Cons:</b> loses variance, components are harder to
+interpret, scale-sensitive, unsupervised (ignores labels). <b>Applications:</b>
+preprocessing, denoising, eigenfaces, visualization, factor analysis.</div>
+
+<h2>Extra credit &mdash; Linear Discriminant Analysis (LDA)</h2>
+<img src="figs/b_lda.png">
+<p>LDA explained-variance ratio: <code>[0.6875, 0.3125]</code>
+(total 100.00%). LDA is <b>supervised</b> &mdash; it uses class
+labels to maximize separation, so the three cultivars form tighter clusters than in
+PCA. Trade-off: LDA needs labels and is limited to C-1 = 2 components for 3 classes.</p>
+
+<h2>Conclusions</h2>
+<ol>
+<li><b>SVM (supervised):</b> linear SVM with <code>class_weight='balanced'</code>
+handled the mild imbalance; stratified k-fold CV confirmed stable generalization;
+kernel chosen by CV F1 (winner: rbf).</li>
+<li><b>PCA (unsupervised):</b> reduced Wine 13&rarr;2 retaining
+55.4% variance; only <b>10</b> components needed for &ge;95%
+variance &mdash; strong compression.</li>
+<li><b>Supervised vs unsupervised:</b> SVM uses labels to classify; PCA ignores labels
+and only compresses variance. LDA (extra credit) uses labels and yields tighter class
+clusters than PCA in 2-D, at the cost of needing labels and fewer components.</li>
+</ol>
+<p style="margin-top:18px;font-size:9pt;color:#888;">All results use
+<code>random_state=42</code>, <code>class_weight='balanced'</code>, and stratified
+5-fold CV for reproducibility.</p>
+</body></html>
