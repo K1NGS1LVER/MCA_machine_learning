@@ -1,26 +1,72 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+
+# C extensions
+*.so
+
+# Distribution / packaging
 .Python
-env/
-venv/
-.venv/
-.env
-.conda/
-conda-meta/
-*.egg-info/
-.eggs/
-dist/
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
 *.egg
+
+# Virtual Environments
+.venv
+.venv/
+venv/
+venv312/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook Checkpoints & Data
+.ipynb_checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+*-checkpoint.ipynb
+
+# macOS Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# IDEs and Editors
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
-.DS_Store
-.ipynb_checkpoints
+
+# Logs and databases
 *.log
-*.pdf
-venv312/
+*.sqlite3
+
+# Marimo temporary sessions
+.marimo/
+*/__marimo__/session/*
+
+# Temporary test / generation scripts
+test_*.py
+test_front_matter.docx
+make_manual.py
+build_full_manual.py
+generate_perfect_manual.py
