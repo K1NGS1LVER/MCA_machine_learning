@@ -191,7 +191,19 @@ This laboratory repository covers practical implementations strictly mapped agai
   - **Text Vectorization:** Sublinear TF-IDF N-gram feature representation ($1 \le n \le 2$).
   - **Classifiers:** Multi-Output Logistic Regression, Balanced Random Forests, and XGBoost.
   - **Evaluation Metric:** Macro $F_1$-score with Stratified 5-Fold Cross-Validation.
-- **Artifacts:** Complete report ([`mission_crisis_report.pdf`](./cia3/mission_crisis_report.pdf)), presentation slides ([`slides.pdf`](./cia3/slides.pdf)), pitch script ([`PITCH_SCRIPT_3MIN.md`](./cia3/PITCH_SCRIPT_3MIN.md)), pipeline notebook ([`mission_crisis_pipeline.ipynb`](./cia3/mission_crisis_pipeline.ipynb)).
+---
+
+## 🎓 End-Term Practical Examination Solutions
+
+### 🏡 [Question 4(i): California Housing Price Prediction (PCA + SVR)](./end_term/)
+- **Core Focus:** End-to-end regression pipeline combining target distribution analysis, IQR outlier inspection, correlation heatmap, PCA dimensionality reduction via scree plot (5 components >95% variance), and Support Vector Regression with RBF kernel.
+- **Key Enhancements:** 5-Fold Cross-Validation, `StandardScaler` vs `RobustScaler` sensitivity analysis, `GridSearchCV` hyperparameter tuning ($C, \epsilon$), and 3-panel residual diagnostics (Actual vs Predicted, Residuals vs Fitted, Normal Q-Q plot).
+- **Artifacts:** Executed notebook ([`California_Housing_PCA_SVR_Pipeline.ipynb`](./end_term/California_Housing_PCA_SVR_Pipeline.ipynb)) | Rendered report ([`California_Housing_PCA_SVR_Pipeline.pdf`](./end_term/California_Housing_PCA_SVR_Pipeline.pdf)).
+
+### 🌸 [Question 5: Multi-Layer Perceptron (MLP) Classifier on Iris Dataset](./end_term/)
+- **Core Focus:** Multi-class classification comparing single-layer `(100,)` vs two-layer `(50, 30)` MLP architectures with Stratified 5-Fold Cross-Validation wrapped in leakage-free pipelines.
+- **Key Enhancements:** Feature-level KDE class separability analysis, training loss convergence curves, train-vs-test generalization gap quantification, baseline model benchmarking (vs Logistic Regression & Random Forest), `GridSearchCV`, permutation feature importance, and normalized recall confusion matrices.
+- **Artifacts:** Executed notebook ([`Iris_MLP_Architecture_Comparison.ipynb`](./end_term/Iris_MLP_Architecture_Comparison.ipynb)) | Rendered report ([`Iris_MLP_Architecture_Comparison.pdf`](./end_term/Iris_MLP_Architecture_Comparison.pdf)).
 
 ---
 
@@ -278,6 +290,12 @@ pandoc Daniel_Paul_2547159_ML_Lab_Manual.docx -o Daniel_Paul_2547159_ML_Lab_Manu
 ├── cia_1/                                   # CIA-1: Road Accident Analysis & Economic Loss
 │   ├── tes.ipynb                            # Accident distribution analysis
 │   └── *.png                                # Economic loss scatter plots & correlation grids
+│
+├── end_term/                                # End-Term Practical Examination Solutions
+│   ├── California_Housing_PCA_SVR_Pipeline.ipynb # Q4(i): PCA + SVR with Scree, GridSearch & Residual Diagnostics
+│   ├── California_Housing_PCA_SVR_Pipeline.pdf   # Q4(i): Rendered PDF report with all diagnostic plots
+│   ├── Iris_MLP_Architecture_Comparison.ipynb    # Q5: MLP (100,) vs (50,30) with Loss Curves & Baseline Benchmarks
+│   └── Iris_MLP_Architecture_Comparison.pdf      # Q5: Rendered PDF report with all confusion & KDE plots
 │
 └── cia3/                                    # CIA-3: Disaster Message Triage NLP Pipeline
     ├── mission_crisis_pipeline.ipynb        # TF-IDF + Ensemble classifier pipeline
