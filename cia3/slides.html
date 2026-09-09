@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Crisis — 3-Minute Presentation Deck & Prompter</title>
+<style>
+  :root {
+    --bg-primary: #070d19;
+    --bg-card: rgba(15, 23, 42, 0.9);
+    --bg-card-border: rgba(56, 189, 248, 0.25);
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent-blue: #38bdf8;
+    --accent-green: #4ade80;
+    --accent-amber: #fbbf24;
+    --accent-purple: #c084fc;
+    --accent-rose: #fb7185;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Presentation Canvas */
+  #presentation {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 10% 20%, rgba(30, 58, 138, 0.3) 0%, rgba(11, 17, 32, 1) 90%);
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: scale(0.98);
+    padding: 32px 48px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+
+  /* Header Section */
+  .slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--bg-card-border);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .slide-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .badge {
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  .time-badge {
+    background: rgba(251, 191, 36, 0.15);
+    color: var(--accent-amber);
+    border-color: var(--accent-amber);
+  }
+
+  .slide-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+  }
+
+  .slide-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* Content Grid Layouts */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+    margin-right: 280px; 
+    margin-bottom: 10px;
+  }
+
+  .content-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    flex: 1;
+    margin-right: 280px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+  }
+
+  .card h3 {
+    font-size: 15px;
+    color: var(--accent-blue);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 6px;
+  }
+
+  .card p, .card li {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+
+  .card ul {
+    list-style-type: none;
+  }
+
+  .card li {
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 16px;
+  }
+
+  .card li::before {
+    content: "•";
+    color: var(--accent-blue);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+  }
+
+  .highlight {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 8px 0;
+  }
+
+  .stat-box {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent-green);
+  }
+
+  .stat-label {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .img-container {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    max-height: 250px;
+  }
+
+  .img-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  table.compact-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+
+  table.compact-table th, table.compact-table td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  table.compact-table th {
+    color: var(--accent-blue);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  table.compact-table tr.winner {
+    background: rgba(74, 222, 128, 0.1);
+    font-weight: 700;
+  }
+
+  /* Camera PiP Placeholder Guide */
+  .cam-placeholder {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 250px;
+    height: 190px;
+    border: 2px dashed rgba(56, 189, 248, 0.4);
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .cam-placeholder span {
+    font-weight: 600;
+    color: var(--accent-blue);
+    margin-bottom: 4px;
+  }
+
+  /* Teleprompter Notes Panel */
+  #prompter {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: calc(100vw - 290px);
+    background: rgba(2, 6, 23, 0.95);
+    border-top: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 99;
+    font-size: 13px;
+    color: #e2e8f0;
+    backdrop-filter: blur(10px);
+  }
+
+  .prompter-content-box {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .prompter-text {
+    font-size: 13px; /* Original 13px font size */
+    line-height: 1.45;
+    font-weight: 500;
+    color: #fef08a;
+  }
+
+  .speech-action {
+    color: var(--accent-amber);
+    font-weight: 700;
+    background: rgba(251, 191, 36, 0.15);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .speech-stress {
+    color: #38bdf8;
+    font-weight: 700;
+  }
+
+  .speech-number {
+    color: #4ade80;
+    font-weight: 700;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .timer-display {
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--accent-green);
+    background: #0f172a;
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  button.btn {
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  button.btn:hover {
+    background: var(--accent-blue);
+    color: #000;
+  }
+
+  .code-snip {
+    background: #020617;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: monospace;
+    font-size: 11px;
+    color: #38bdf8;
+    line-height: 1.35;
+  }
+</style>
+</head>
+<body>
+
+<div id="presentation">
+
+  <!-- ==================== SLIDE 1: 0:00 - 0:35 ==================== -->
+  <div class="slide active" id="slide-1" data-title="Problem & Beneficiaries (0:00 - 0:35)" 
+       data-script='<span class="speech-action">[Intro & Hook]</span> "Hello everyone! Today I am presenting <span class="speech-stress">Mission Crisis</span>: an end-to-end Machine Learning solution for <span class="speech-stress">Disaster Emergency Request Triage</span>. <span class="speech-action">[Context]</span> When major natural disasters strike—like the Haiti earthquake or Pakistan floods—emergency hotlines and social networks get flooded with tens of thousands of messages. Manual human triage takes <span class="speech-stress">6 to 12 hours</span>, creating dangerous response bottlenecks. <span class="speech-action">[Our Mission]</span> Our goal is to build an explainable ensemble pipeline to predict whether an incoming message is an urgent <span class="speech-stress">request for aid</span>, reducing triage latency from <span class="speech-stress">hours down to under a second</span>."' >
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <span class="badge">Part 1</span>
+        <span class="badge time-badge">0:00 – 0:35</span>
+        <h1 class="slide-title">Mission Crisis: Disaster Response Message Classification</h1>
+      </div>
+      <div class="slide-subtitle">MCA 521-4 | ML for Social Good Challenge</div>
+    </div>
+
+    <div class="content-grid">
+      <div class="card">
+        <h3>🚨 The Real-World Crisis Problem</h3>
+        <ul>
+          <li><span class="highlight">Information Overload:</span> Catastrophic floods and earthquakes trigger massive volumes of incoming distress calls across SMS, radio, and news feeds.</li>
+          <li><span class="highlight">Triage Latency:</span> Manual sorting takes 6 to 12 hours, delaying critical first-responder deployment.</li>
+          <li><span class="highlight">Prediction Target:</span> Binary classification <code style="color:#38bdf8;">request &isin; {0, 1}</code> (Urgent actionable need for food, clean water, medical aid, or search & rescue).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>🎯 Target Beneficiaries & Impact</h3>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-num">&lt; 1 sec</div>
+            <div class="stat-label">Triage Latency (vs. Hours)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">26,248</div>
+            <div class="stat-label">Historical Disaster Records</div>
+          </div>
+        </div>
+        <ul>
+          <li><span class="highlight">Primary Users:</span> Emergency dispatchers, Red Cross, FEMA, and local rescue coordinators.</li>
+          <li><span class="highlight">Dataset:</span> Appen / Figure Eight Multilingual Disaster Response benchmark.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 2: 0:35 - 1:15 ==================== -->
+  <div class="slide" id="slide-2" data-title="Data Wrangling & Feature Engineering (0:35 - 1:15)"
+       data-script='<span class="speech-action">[Data Walkthrough]</span> "Now let us look at our <span class="speech-stress">leakage-safe preprocessing</span> and feature engineering. We audited over <span class="speech-number">26,000 real disaster records</span>, removing exact duplicates to protect validation integrity. <span class="speech-action">[Feature Fusion]</span> We extracted <span class="speech-number">1,000 n-gram TF-IDF text features</span> and fused them with domain-informed metadata: text length, exclamation mark intensity, question markers, and channel genre encodings. <span class="speech-action">[Anti-Leakage]</span> Crucially, our 80/20 train-test split was created <span class="speech-stress">BEFORE fitting any scalers or vectorizers</span>, and class imbalance was resolved using <span class="speech-stress">SMOTE applied exclusively to the training set</span>."' >
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <span class="badge">Part 2</span>
+        <span class="badge time-badge">0:35 – 1:15</span>
+        <h1 class="slide-title">Data Wrangling, Feature Fusion & Leakage-Safe SMOTE</h1>
+      </div>
+      <div class="slide-subtitle">Leakage-Safe Preprocessing Pipeline (CO2 / L3)</div>
+    </div>
+
+    <div class="content-grid-3">
+      <div class="card">
+        <h3>🧹 Data Audit & Cleaning</h3>
+        <ul>
+          <li><strong>26,248</strong> raw multilingual disaster messages audited.</li>
+          <li>Deduplicated identical text entries to prevent cross-partition leakage.</li>
+          <li>Handled missing fields and normalized text casing.</li>
+        </ul>
+        <div class="img-container" style="max-height: 120px; margin-top:6px;">
+          <img src="presentation_assets/plot_1.png" alt="Target Distribution">
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>⚙️ Heterogeneous Feature Fusion</h3>
+        <ul>
+          <li><span class="highlight">Text Features:</span> Unigram & Bigram TF-IDF sparse matrix (<code style="color:#38bdf8;">max_features=1000</code>).</li>
+          <li><span class="highlight">Urgency Metadata:</span> Exclamation marks (<code style="color:#38bdf8;">!</code>), question markers (<code style="color:#38bdf8;">?</code>), uppercase intensity ratio.</li>
+          <li><span class="highlight">Context Encodings:</span> Channel genres (Direct SMS vs. News vs. Social).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>🛡️ Anti-Leakage SMOTE</h3>
+        <ul>
+          <li><span class="highlight">Stratified 80/20 Split:</span> Executed <em>before</em> any transformer fitting.</li>
+          <li><span class="highlight">Zero Data Leakage:</span> Scalers & vectorizers fitted strictly on <code style="color:#4ade80;">X_train</code>.</li>
+          <li><span class="highlight">SMOTE Oversampling:</span> Applied solely to training split to balance minority emergency requests.</li>
+        </ul>
+        <div class="img-container" style="max-height: 120px; margin-top:6px;">
+          <img src="presentation_assets/plot_2.png" alt="Categories">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 3: 1:15 - 2:10 ==================== -->
+  <div class="slide" id="slide-3" data-title="Ensemble Architectures & Benchmark (1:15 - 2:10)"
+       data-script='<span class="speech-action">[Model Comparison]</span> "Here is our core modeling benchmark comparing six distinct paradigms on the untouched test set. <span class="speech-action">[Results]</span> Our baseline Logistic Regression scored an F1 of 0.63. <span class="speech-stress">Random Forest Bagging achieved our highest overall F1-score of 0.6722 and an ROC-AUC of 0.8804</span>, successfully reducing variance over high-dimensional sparse text. <span class="speech-action">[Key Insight]</span> Notice that <span class="speech-stress">XGBoost delivered our highest sensitivity with 85.8% Recall</span>—which is vital in disaster relief to ensure zero missed emergencies. Our heterogeneous Stacking and Soft Voting ensembles also maintained strong 0.665+ F1 scores."' >
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <span class="badge">Part 3</span>
+        <span class="badge time-badge">1:15 – 2:10</span>
+        <h1 class="slide-title">Ensemble Architecture & Benchmark Comparison</h1>
+      </div>
+      <div class="slide-subtitle">Baseline vs. Bagging, Boosting, EBM & Stacking (CO2, CO3 / L3)</div>
+    </div>
+
+    <div class="content-grid">
+      <div class="card">
+        <h3>📊 Comprehensive Test Benchmark</h3>
+        <table class="compact-table">
+          <thead>
+            <tr>
+              <th>Model Architecture</th>
+              <th>Type</th>
+              <th>F1-Score</th>
+              <th>Recall</th>
+              <th>ROC-AUC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="winner">
+              <td>🌲 Random Forest</td>
+              <td>Bagging</td>
+              <td>0.6722</td>
+              <td>72.8%</td>
+              <td>0.8804</td>
+            </tr>
+            <tr>
+              <td>🗳️ Voting Classifier</td>
+              <td>Soft Ensemble</td>
+              <td>0.6684</td>
+              <td>73.6%</td>
+              <td>0.8886</td>
+            </tr>
+            <tr>
+              <td>🧱 Stacking Classifier</td>
+              <td>Heterogeneous</td>
+              <td>0.6653</td>
+              <td>73.0%</td>
+              <td>0.8886</td>
+            </tr>
+            <tr>
+              <td>📈 Logistic Regression</td>
+              <td>Baseline</td>
+              <td>0.6322</td>
+              <td>78.1%</td>
+              <td>0.8887</td>
+            </tr>
+            <tr>
+              <td>🔍 EBM (Glass-Box)</td>
+              <td>GAM Splines</td>
+              <td>0.6101</td>
+              <td>66.1%</td>
+              <td>0.8479</td>
+            </tr>
+            <tr>
+              <td>⚡ XGBoost</td>
+              <td>Boosting</td>
+              <td>0.5247</td>
+              <td><strong>85.8%</strong></td>
+              <td>0.8727</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px; font-size:11px; color:#94a3b8;">
+          ✓ <strong>Ensemble Superiority:</strong> Bagging & Stacking significantly improve precision and stability over the baseline.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>📈 ROC Curves & Metric Visualization</h3>
+        <div class="img-container">
+          <img src="presentation_assets/plot_11.png" alt="Model Comparison Chart">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 4: 2:10 - 2:35 ==================== -->
+  <div class="slide" id="slide-4" data-title="Model Explainability (2:10 - 2:35)"
+       data-script='<span class="speech-action">[Explainability]</span> "In emergency response, black-box predictions cannot be deployed blindly. We implemented two layers of interpretability: <span class="speech-stress">SHAP TreeExplainer</span> and an <span class="speech-stress">Explainable Boosting Machine</span> glass-box model. <span class="speech-action">[Feature Insights]</span> Globally, Shapley game theory reveals that high-urgency keywords like <span class="speech-stress">‘water’, ‘food’, ‘help’, ‘hospital’</span>, and direct communication channels drive the strongest positive attribution towards dispatching aid."' >
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <span class="badge">Part 4</span>
+        <span class="badge time-badge">2:10 – 2:35</span>
+        <h1 class="slide-title">Model Explainability: SHAP & EBM Glass-Box Models</h1>
+      </div>
+      <div class="slide-subtitle">Global Feature Importance & Local Attribution (CO3, CO5 / L5)</div>
+    </div>
+
+    <div class="content-grid">
+      <div class="card">
+        <h3>🔍 SHAP Global Feature Impact</h3>
+        <p style="margin-bottom:4px; font-size:11.5px;">Top predictive words discovered through Shapley game theory:</p>
+        <div class="img-container">
+          <img src="presentation_assets/plot_14.png" alt="SHAP Importance">
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🧩 EBM Glass-Box GAM Feature Scoring</h3>
+        <p style="margin-bottom:4px; font-size:11.5px;">Exact additive scoring without black-box approximations:</p>
+        <div class="img-container">
+          <img src="presentation_assets/plot_17.png" alt="EBM Features">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 5: 2:35 - 3:00 ==================== -->
+  <div class="slide" id="slide-5" data-title="Live Demo & Ethics (2:35 - 3:00)"
+       data-script='<span class="speech-action">[Live Demo]</span> "Finally, let us test a realistic synthetic transmission: <span class="speech-stress">‘We need clean water urgently! Our village has been flooded and children are sick.’</span> Our serialized pipeline flags this as an urgent <span class="speech-stress">REQUEST FOR HELP with 96.68% confidence</span>. <span class="speech-action">[Ethics & Governance]</span> On ethics, we designed our decision boundary around an <span class="speech-stress">asymmetric cost matrix</span>—because a false negative that leaves a family stranded is far more costly than a false alarm. The AI acts as a human-in-the-loop triage assistant, not an autonomous agent. Thank you!"' >
+    <div class="slide-header">
+      <div class="slide-title-wrap">
+        <span class="badge">Part 5</span>
+        <span class="badge time-badge">2:35 – 3:00</span>
+        <h1 class="slide-title">Live Inference Demo, Ethics & Responsible AI</h1>
+      </div>
+      <div class="slide-subtitle">End-to-End Pipeline Serialization & Ethical Governance (CO5 / L4)</div>
+    </div>
+
+    <div class="content-grid">
+      <div class="card">
+        <h3>⚡ Real-Time Live Inference</h3>
+        <div class="code-snip">
+          &gt; Input: "We need clean water urgently! Our village has been flooded and children are sick."<br><br>
+          <span style="color:#4ade80; font-weight:bold;">&gt; Prediction: REQUEST FOR HELP [CONFIDENCE: 96.68%]</span><br>
+          <span style="color:#94a3b8;">&gt; P(Not Request): 0.0332 | P(Request): 0.9668</span>
+        </div>
+        <div class="img-container" style="margin-top:8px; max-height:115px;">
+          <img src="presentation_assets/plot_19.png" alt="Local SHAP Demo">
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>⚖️ Responsible AI & Ethical Framework</h3>
+        <ul>
+          <li><span class="highlight">Asymmetric Cost Matrix:</span> False Negatives (unattended victims) are far costlier than False Positives. We optimize for high recall.</li>
+          <li><span class="highlight">Human-in-the-Loop:</span> AI acts as an accelerator for dispatchers, never the sole decision-maker.</li>
+          <li><span class="highlight">Privacy & Bias:</span> Zero PII stored; regional dialect adaptation required for deployment.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Camera Safe Zone Placeholder -->
+<div class="cam-placeholder" id="camGuide">
+  <span>📹 OBS CAMERA PiP</span>
+  Bottom-Right Corner (16:9 Cutout)<br>
+  Keep your face here!
+</div>
+
+<!-- Teleprompter & Controls Footer -->
+<div id="prompter">
+  <div class="prompter-content-box">
+    <div class="prompter-text" id="scriptText">
+      Loading script...
+    </div>
+  </div>
+  <div class="controls">
+    <div class="timer-display" id="timerDisplay">00:00 / 03:00</div>
+    <button class="btn" id="startTimerBtn" onclick="toggleTimer()">Start Pitch</button>
+    <button class="btn" onclick="prevSlide()">◀ Prev</button>
+    <button class="btn" onclick="nextSlide()">Next ▶</button>
+    <button class="btn" onclick="toggleCamGuide()">Toggle Cam Box</button>
+  </div>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const scriptText = document.getElementById('scriptText');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const startTimerBtn = document.getElementById('startTimerBtn');
+  
+  let timerInterval = null;
+  let elapsedSeconds = 0;
+  const totalSeconds = 180; // 3 minutes
+
+  function updateSlide(index) {
+    if (index < 0 || index >= slides.length) return;
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    currentSlide = index;
+    const script = slides[currentSlide].getAttribute('data-script');
+    scriptText.innerHTML = `<strong>🗣️ Script (Slide ${currentSlide+1}/5):</strong> ${script}`;
+  }
+
+  function nextSlide() {
+    if (currentSlide < slides.length - 1) {
+      updateSlide(currentSlide + 1);
+    }
+  }
+
+  function prevSlide() {
+    if (currentSlide > 0) {
+      updateSlide(currentSlide - 1);
+    }
+  }
+
+  function toggleTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      startTimerBtn.innerText = "Resume";
+      startTimerBtn.style.borderColor = "var(--accent-amber)";
+    } else {
+      timerInterval = setInterval(() => {
+        elapsedSeconds++;
+        const mins = Math.floor(elapsedSeconds / 60).toString().padStart(2, '0');
+        const secs = (elapsedSeconds % 60).toString().padStart(2, '0');
+        timerDisplay.innerText = `${mins}:${secs} / 03:00`;
+        
+        if (elapsedSeconds >= totalSeconds) {
+          timerDisplay.style.color = "var(--accent-rose)";
+          clearInterval(timerInterval);
+        } else if (elapsedSeconds >= 150) {
+          timerDisplay.style.color = "var(--accent-amber)";
+        }
+      }, 1000);
+      startTimerBtn.innerText = "Pause";
+      startTimerBtn.style.borderColor = "var(--accent-rose)";
+    }
+  }
+
+  function toggleCamGuide() {
+    const guide = document.getElementById('camGuide');
+    guide.style.display = guide.style.display === 'none' ? 'flex' : 'none';
+  }
+
+  // Keyboard controls
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      prevSlide();
+    } else if (e.key.toLowerCase() === 'f') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    } else if (e.key.toLowerCase() === 'c') {
+      toggleCamGuide();
+    }
+  });
+
+  // Initialize
+  updateSlide(0);
+</script>
+</body>
+</html>
