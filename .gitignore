@@ -70,3 +70,11 @@ test_front_matter.docx
 make_manual.py
 build_full_manual.py
 generate_perfect_manual.py
+show_env.py
+ML Lab Manual.docx
+
+# Testing & cache directories
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
