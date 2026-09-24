@@ -28,7 +28,9 @@ wheels/
 # Virtual Environments
 .venv
 .venv/
+venv
 venv/
+venv312
 venv312/
 ENV/
 env/
@@ -78,3 +80,5 @@ ML Lab Manual.docx
 .ruff_cache/
 .mypy_cache/
 
+# PDF files (generated reports, manuals, and deliverables)
+*.pdf
