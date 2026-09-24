@@ -42,6 +42,18 @@ are for educational benchmarking and are not clinical diagnostic data.
 - Visualize first-layer learned kernels and feature maps from an OrganAMNIST
   slice.
 
+## Additional learning implementations
+
+- Add training-only data augmentation using small rotations and translations.
+  Show a before/after example and state that validation and test images are not
+  augmented.
+- Analyze the training class distribution and compute balanced class weights
+  from training labels only. Train with those weights and compare ordinary
+  accuracy with macro and weighted metrics.
+- Implement a small custom Keras `Layer` that applies one fixed image kernel
+  inside the TensorFlow pipeline, then compare its output structure with the
+  built-in `Conv2D` demonstration.
+
 ## Complexity analysis
 
 - Preserve the layer-by-layer output structure table.
@@ -71,6 +83,8 @@ are for educational benchmarking and are not clinical diagnostic data.
 - Include a class-imbalance note explaining why accuracy alone is insufficient.
 - Add a medical-data caution that resized CT slices are not complete patient
   studies and model results are not clinical validation.
+- Explain that augmentation changes training examples, class weights change the
+  loss contribution of classes, and a custom layer demonstrates extensibility.
 
 ## Beginner-error audit and references
 
@@ -97,4 +111,3 @@ TensorFlow overfitting guidance, Keras `Conv2D`, and Keras `EarlyStopping`.
   metrics, confusion matrix, filter plots, and learned feature maps.
 - Preserve populated outputs in the committed notebook if repository convention
   continues to favor executed notebooks.
-
