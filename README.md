@@ -245,7 +245,6 @@ pandoc Daniel_Paul_2547159_ML_Lab_Manual.docx -o Daniel_Paul_2547159_ML_Lab_Manu
 ├── README.md                                # Comprehensive academic documentation & portfolio index
 ├── .gitignore                               # Environment, OS metadata, and checkpoint ignore rules
 ├── requirements.txt                         # Pinned Python package dependencies
-├── pyrightconfig.json                       # Static typing & LSP configuration
 ├── Daniel_Paul_2547159_ML_Lab_Manual.docx   # Master compiled Word Lab Manual
 ├── Daniel_Paul_2547159_ML_Lab_Manual.pdf    # Master compiled PDF Lab Manual (183 pages)
 ├── generate_perfect_manual.py               # Programmatic docx compiler script
