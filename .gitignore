@@ -82,3 +82,31 @@ ML Lab Manual.docx
 
 # PDF files (generated reports, manuals, and deliverables)
 *.pdf
+*.docx
+*.pptx
+*.xlsx
+
+# Machine Learning Checkpoints & Tuner Caches
+.keras_tuner_unified/
+.*_tuner*/
+keras_tuner/
+tuner*.json
+oracle.json
+trial.json
+*.h5
+*.hdf5
+*.keras
+*.pth
+*.pt
+*.onnx
+*.ckpt
+*.pkl
+*.npy
+*.npz
+*.parquet
+
+# Sample media & test assets
+*.jpg
+*.jpeg
+*.png
+*.gif
