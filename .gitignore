@@ -4,9 +4,6 @@ __pycache__/
 *$py.class
 *.so
 
-# C extensions
-*.so
-
 # Distribution / packaging
 .Python
 build/
@@ -26,22 +23,21 @@ wheels/
 *.egg
 
 # Virtual Environments
-.venv
 .venv/
-venv
 venv/
-venv312
 venv312/
 ENV/
 env/
 env.bak/
 venv.bak/
 
-# Jupyter Notebook Checkpoints & Data
-.ipynb_checkpoints
+# Jupyter Notebook Checkpoints
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
 *-checkpoint.ipynb
+
+# nbconvert outputs (HTML/PDF generated from notebooks)
+*.nbconvert.html
 
 # macOS Files
 .DS_Store
@@ -80,8 +76,7 @@ ML Lab Manual.docx
 .ruff_cache/
 .mypy_cache/
 
-# PDF files (generated reports, manuals, and deliverables)
-*.pdf
+# Generated reports and deliverables
 *.docx
 *.pptx
 *.xlsx
@@ -110,3 +105,7 @@ trial.json
 *.jpeg
 *.png
 *.gif
+
+# Notebook export artifacts (generated)
+*.html
+*.pdf
